@@ -1,0 +1,13 @@
+# Python bytecode files
+*.pyc
+
+# VIM swap files
+*.swp
+
+# setuptools components
+/build/
+/dist/
+*.egg-info
+
+# User specific settings
+settings.py
