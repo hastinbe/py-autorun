@@ -58,7 +58,7 @@ class Autorun:
       if 'skip_if_holiday' in params['conditions']:
         if params['conditions']['skip_if_holiday']:
           if self.is_holiday():
-            continue;
+            continue
 
       if 'skip_if_weekend' in params['conditions']:
         if params['conditions']['skip_if_weekend']:
@@ -82,9 +82,12 @@ class Autorun:
     @return (bool) True, if application is running, otherwise False.
     """
 
-    for proc in psutil.get_process_list():
-      if proc.name == app_name:
-        return True
+    try:
+      for proc in psutil.get_process_list():
+        if proc.name == app_name:
+          return True
+    except:
+      return False
     return False
 
   # ------------------------------------------------------------------------------------------------
@@ -93,19 +96,19 @@ class Autorun:
     """
     Check if date is a US holiday.
 
-    @param date (str) A date in YYYYMMDD format.
+    @param date (datetime.date) The date
 
     @return (bool) True, if date is a holiday, otherwise False.
     """
 
     if date is None:
-      date = datetime.date.today().strftime('%Y%m%d')
+      date = datetime.date.today()
 
     calendar = Calendar.from_ical(open(self.icalendar, 'rb').read())
     holidays = [i['dtstart'] for i in calendar.walk('VEVENT')]
 
     for holiday in holidays:
-      if holiday.to_ical() == date:
+      if holiday.to_ical() == date.strftime('%Y%m%d'):
         return True
     return False
 
