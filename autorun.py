@@ -29,7 +29,14 @@ from icalendar import Calendar
 
 # --------------------------------------------------------------------------------------------------
 
-class Autorun:
+class Autorun(object):
+  """
+  Provides an interface for executing applications under specified conditions.
+
+  Attributes:
+    apps (dict) Applications to autorun.
+    ical (str)  Path to an iCalendar file.
+  """
 
   def __init__ (self, apps, ical):
     """
