@@ -31,16 +31,17 @@ from icalendar import Calendar
 
 class Autorun:
 
-  def __init__ (self, apps, icalendar):
+  def __init__ (self, apps, ical):
     """
     Create a new Autorun instance.
 
-    @param apps      (dict) Applications to autorun.
-    @param icalendar (str)  Path to an iCalendar file.
+    Args:
+      apps (dict) Applications to autorun.
+      ical (str)  Path to an iCalendar file.
     """
 
     self.apps = apps
-    self.icalendar = icalendar
+    self.ical = ical
 
   # ------------------------------------------------------------------------------------------------
 
@@ -50,26 +51,23 @@ class Autorun:
     """
 
     for app, params in self.apps.iteritems():
-      if 'skip_if_running' in params['conditions']:
-        if params['conditions']['skip_if_running']:
-          if self.is_running(app):
-            continue
+      if params['conditions'].get('skip_if_running'):
+        if self.is_running(app):
+          continue
 
-      if 'skip_if_holiday' in params['conditions']:
-        if params['conditions']['skip_if_holiday']:
-          if self.is_holiday():
-            continue
+      if params['conditions'].get('skip_if_holiday'):
+        if self.is_holiday():
+          continue
 
-      if 'skip_if_weekend' in params['conditions']:
-        if params['conditions']['skip_if_weekend']:
-          if self.is_weekend():
-            continue
+      if params['conditions'].get('skip_if_weekend'):
+        if self.is_weekend():
+          continue
 
       args = [params['path']]
       if not params['args'] is None:
         args.append(params['args'])
 
-      params['pid'] = subprocess.Popen(args).pid
+      subprocess.Popen(args)
 
   # ------------------------------------------------------------------------------------------------
 
@@ -77,9 +75,11 @@ class Autorun:
     """
     Check if an application is running.
 
-    @param app_name (str) The name of the application.
+    Args:
+      app_name (str) The name of the application.
 
-    @return (bool) True, if application is running, otherwise False.
+    Returns:
+      (bool) True, if application is running, otherwise False.
     """
 
     try:
@@ -87,7 +87,7 @@ class Autorun:
         if proc.name == app_name:
           return True
     except:
-      return False
+      pass
     return False
 
   # ------------------------------------------------------------------------------------------------
@@ -96,19 +96,22 @@ class Autorun:
     """
     Check if date is a US holiday.
 
-    @param date (datetime.date) The date
+    Args:
+      date (datetime.date) The date
 
-    @return (bool) True, if date is a holiday, otherwise False.
+    Returns:
+      (bool) True, if date is a holiday, otherwise False.
     """
 
     if date is None:
       date = datetime.date.today()
 
-    calendar = Calendar.from_ical(open(self.icalendar, 'rb').read())
-    holidays = [i['dtstart'] for i in calendar.walk('VEVENT')]
+    calendar = Calendar.from_ical(open(self.ical, 'rb').read())
+    holidays = [e['dtstart'] for e in calendar.walk('VEVENT')]
+    date_str = date.strftime('%Y%m%d')
 
     for holiday in holidays:
-      if holiday.to_ical() == date.strftime('%Y%m%d'):
+      if holiday.to_ical() == date_str:
         return True
     return False
 
@@ -118,9 +121,11 @@ class Autorun:
     """
     Check if date is a weekend
 
-    @param date (datetime.date) The date.
+    Args:
+      date (datetime.date) The date.
 
-    @return (bool) True, if date falls on a weekend, otherwise False.
+    Returns:
+      (bool) True, if date falls on a weekend, otherwise False.
     """
 
     if date is None:
