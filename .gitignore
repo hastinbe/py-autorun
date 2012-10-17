@@ -1,6 +1,5 @@
 # Python bytecode files
-*.pyc
-*.pyo
+*.py[co]
 
 # Packages
 *.egg
