@@ -15,7 +15,7 @@
 
 APP_AUTHOR  = "Beau Hastings"
 APP_EMAIL   = "beausy@gmail.com"
-APP_GIT     = "http://github.com/hastinbe/autorun.git"
+APP_GIT     = "http://github.com/hastinbe/py-autorun.git"
 APP_NAME    = "Autorun"
 APP_VERSION = "0.1.0-alpha"
 
