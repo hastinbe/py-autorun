@@ -15,12 +15,14 @@ apps = {
     'conditions': {
       'skip_if_running': True or False,     # Skip running this application if it is already running
       'skip_if_holiday': True or False,     # Skip running this application if it is a holiday
-      'skip_if_weekend': True or False      # Skip running this application if it is a weekend
+      'skip_if_weekend': True or False,     # Skip running this application if it is a weekend
+      'require_internet': True or False,    # Run this application if internet connectivity exists
     }
   }
 }
 """
 
+# Applications to autorun
 apps = {
   'irssi.exe': {
     'path': 'd:/applications/irssi/irssi.bat',
@@ -42,4 +44,13 @@ apps = {
   }
 }
 
+# Path to an iCalender file which contains holidays
 icalendar = 'USHolidays.ics'
+
+# URLs used to test internet connectivity
+urls = [
+  'http://74.125.227.20' # www.google.com
+]
+
+# Timeout in seconds to block during the connection attempt
+url_timeout = 60
